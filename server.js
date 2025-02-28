@@ -14,9 +14,9 @@ const io = new Server(server, {
 // Serve static files from the "public" directory
 app.use(express.static(__dirname + "/public"));
 
-// Serve the index.html file for the root route
+// Root route
 app.get("/", (req, res) => {
-    res.sendFile(__dirname + "/public/index.html");
+    res.send("Backend is running!");
 });
 
 // WebSocket Logic
@@ -29,7 +29,6 @@ io.on("connection", (socket) => {
 
         socket.on("disconnect", () => {
             io.to(roomId).emit("user-disconnected", socket.id);
-            console.log("A user disconnected:", socket.id);
         });
     });
 
@@ -38,6 +37,7 @@ io.on("connection", (socket) => {
     });
 });
 
-server.listen(3000, () => {
-    console.log("Server running on http://localhost:3000");
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
 });
